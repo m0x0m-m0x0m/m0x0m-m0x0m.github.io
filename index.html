@@ -32,56 +32,67 @@
 /*--------------------
  switching
 --------------------*/
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  background-color: #f5f5f5;
+}
+
 .switching__content-box {
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .switching__content {
-  width: 100vh;
-  display: flex;             /* フレックスボックス */
-  justify-content: center;   /* 中央揃え */
-  align-items: center;       /* 垂直方向の中央揃え */
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .switching__content:nth-child(odd) {
-  background-color: rgba(32, 47, 85, 0.3);
+  background-color: rgba(32, 47, 85, 0.1);
 }
 
 .switching__content-inner {
-  display: flex;            /* フレックスボックスで中央揃え */
-  justify-content: center;  /* 横方向に中央揃え */
-  align-items: center;      /* 縦方向に中央揃え */
   width: 100%;
+  max-width: 500px; /* 最大幅を設定して中央に */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .switching__content-text {
-  display: table-cell;
-  font-size: 30px;
+  font-size: 24px;
   text-align: center;
-  vertical-align: middle;
 }
 
-/* クリックカウンタ用 */
+/* クリックカウンタ */
 #click-counter {
-  text-align: center; 
+  text-align: center;
   margin-top: 20px;
+  font-size: 18px;
 }
 
 #click-button {
-  width: 200px; /* 画像ボタンの幅 */
-  height: auto; /* 高さは自動 */
+  width: 60%;
+  max-width: 250px;
+  height: auto;
+  margin-top: 15px;
+  cursor: pointer;
 }
 
-/* 画像のリサイズ設定 */
+/* 結果画像調整 */
 #result-image {
-  max-width: 100%;  /* 親要素の幅に合わせてリサイズ */
- max-height: 80%; /* 親要素の高さに合わせてリサイズ */
-   object-fit: contain; /* アスペクト比を保って収める */
- }
-
-/* クリックカウンタエリアのスタイル */
-#click-counter {
-  margin-top: 10px;  /* 回転数エリアとの間隔を少し詰める */
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: contain;
 }
 </style>
 
@@ -131,8 +142,13 @@
       const videoElement = document.createElement('video');
       videoElement.src = 'atari.mp4';  // アタリの動画
       videoElement.controls = true;    // 動画のコントロールボタンを表示
-      videoElement.style.width = '100%';  // 動画の幅を調整
-      videoElement.style.height = '100%'; // 動画の高さを調整
+ // スマホ対応のスタイルを追加
+  videoElement.style.width = '100%';
+  videoElement.style.height = '100%';
+  videoElement.style.maxWidth = '100%';
+  videoElement.style.maxHeight = '60vh';
+  videoElement.style.objectFit = 'contain';
+        
       el.randomSwitching[0].appendChild(videoElement);  // videoを追加
 
       // 自動で動画を再生
@@ -140,6 +156,8 @@
 
       clickButton.disabled = true;
       clickButton.style.cursor = 'not-allowed';  // クリックを無効化
+        clickButton.style.pointerEvents = 'none';
+
       clickButton.setAttribute('alt', '当選おめでとう！'); // ボタンのテキスト代わり
     }
   }, false);
