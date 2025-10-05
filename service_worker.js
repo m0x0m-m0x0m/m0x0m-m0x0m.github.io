@@ -1,15 +1,22 @@
-// キャッシュファイルの指定
-var CACHE_NAME = 'pwa-sample-caches';
+var CACHE_NAME = 'pwa-sample-cache-v1';
 var urlsToCache = [
-	'/m0x0m-m0x0m.github.io/.github.io/',
+    '/',
+    '/index.html',
+    '/styles.css',
+    '/script.js',
+    '/images/icon-192x192.jpg',
+    '/images/icon-512x512.jpg',
+    '/atari.mp4',
+    '/hazure.png',
+    '/button.png'
 ];
 
 // インストール処理
 self.addEventListener('install', function(event) {
     event.waitUntil(
-        caches
-            .open(CACHE_NAME)
+        caches.open(CACHE_NAME)
             .then(function(cache) {
+                console.log('Opened cache');
                 return cache.addAll(urlsToCache);
             })
     );
@@ -18,10 +25,10 @@ self.addEventListener('install', function(event) {
 // リソースフェッチ時のキャッシュロード処理
 self.addEventListener('fetch', function(event) {
     event.respondWith(
-        caches
-            .match(event.request)
+        caches.match(event.request)
             .then(function(response) {
-                return response ? response : fetch(event.request);
+                // キャッシュがあればそれを返し、なければネットワークから取得
+                return response || fetch(event.request);
             })
     );
 });
