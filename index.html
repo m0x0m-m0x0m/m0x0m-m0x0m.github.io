@@ -1,0 +1,149 @@
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<div class="switching">
+  <div class="switching__content-box">
+    <!-- 確率で切り替え有りのエリア -->
+    <div class="switching__content js-randomSwitching">
+      <div class="switching__content-inner">
+        <!-- 初期表示でhazure.pngを中央揃えで表示 -->
+        <img id="result-image" src="hazure.png" alt="ハズレ"/>
+      </div>
+    </div>
+    <div class="switching__content">
+      <div class="switching__content-inner">
+        <!-- クリックカウンタ用の要素 -->
+        <div id="click-counter">
+          <p>現在の回転数：<span id="count">0</span>回転</p>
+          <!-- 画像ボタンに変更 -->
+          <img id="click-button" src="button.png" alt="クリックしてカウント" style="cursor: pointer;"/>
+        </div>
+      </div><!-- /.switching__contentBox -->
+    </div><!-- /.switching -->
+  </div><!-- /.switching__content-box -->
+</div><!-- /.switching -->
+
+<!-- CSS -->
+<style>
+/*--------------------
+ switching
+--------------------*/
+.switching__content-box {
+  height: 100vh;
+}
+
+.switching__content {
+  width: 100vh;
+  display: flex;             /* フレックスボックス */
+  justify-content: center;   /* 中央揃え */
+  align-items: center;       /* 垂直方向の中央揃え */
+}
+
+.switching__content:nth-child(odd) {
+  background-color: rgba(32, 47, 85, 0.3);
+}
+
+.switching__content-inner {
+  display: flex;            /* フレックスボックスで中央揃え */
+  justify-content: center;  /* 横方向に中央揃え */
+  align-items: center;      /* 縦方向に中央揃え */
+  width: 100%;
+}
+
+.switching__content-text {
+  display: table-cell;
+  font-size: 30px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* クリックカウンタ用 */
+#click-counter {
+  text-align: center; 
+  margin-top: 20px;
+}
+
+#click-button {
+  width: 200px; /* 画像ボタンの幅 */
+  height: auto; /* 高さは自動 */
+}
+
+/* 画像のリサイズ設定 */
+#result-image {
+  max-width: 100%;  /* 親要素の幅に合わせてリサイズ */
+  max-height: 80%; /* 親要素の高さに合わせてリサイズ */
+  object-fit: contain; /* アスペクト比を保って収める */
+}
+
+/* クリックカウンタエリアのスタイル */
+#click-counter {
+  margin-top: 10px;  /* 回転数エリアとの間隔を少し詰める */
+}
+</style>
+
+<script>
+//random switching
+(function (){
+  let i = 0;
+  let el = {};
+  document.addEventListener('DOMContentLoaded', function () {
+    el.randomSwitching = document.querySelectorAll('.js-randomSwitching');
+    el.random = Math.floor(Math.random() * 100);  // 0 ～ 99のランダム値
+    const clickButton = document.getElementById('click-button');
+    let count = localStorage.getItem('clickCount') ? parseInt(localStorage.getItem('clickCount')) : 0;
+    const countDisplay = document.getElementById('count');
+    let isWinner = localStorage.getItem('isWinner') === 'true';
+    const resultImage = document.getElementById('result-image'); // 画像要素を取得
+
+    // 初期表示
+    countDisplay.innerText = count;
+
+    // 当選状態の確認と適用
+    if (isWinner || el.random < 6) {  // 1/16 の確率 (0～5 の場合)
+      randomSwitchFnc();
+    }
+
+    // 画像ボタンにクリックイベントを追加
+    clickButton.addEventListener('click', function () { 
+      if (!isWinner) {
+        count++;
+        countDisplay.innerText = count;
+        localStorage.setItem('clickCount', count);
+
+        el.random = Math.floor(Math.random() * 16);  // 0 ～ 15のランダム値
+        if (el.random === 0) {  // 1/16 の確率 (0の場合)
+          isWinner = true;
+          localStorage.setItem('isWinner', 'true');
+          randomSwitchFnc();
+        }
+      }
+    });
+
+    function randomSwitchFnc() {
+      // 結果画像を隠す（アタリの場合）
+      resultImage.style.display = 'none';
+
+      // 確率で切り替え有りのエリアに動画を表示
+      const videoElement = document.createElement('video');
+      videoElement.src = 'atari.mp4';  // アタリの動画
+      videoElement.controls = true;    // 動画のコントロールボタンを表示
+      videoElement.style.width = '100%';  // 動画の幅を調整
+      videoElement.style.height = '100%'; // 動画の高さを調整
+      el.randomSwitching[0].appendChild(videoElement);  // videoを追加
+
+      // 自動で動画を再生
+      videoElement.play();
+
+      clickButton.disabled = true;
+      clickButton.style.cursor = 'not-allowed';  // クリックを無効化
+      clickButton.setAttribute('alt', '当選おめでとう！'); // ボタンのテキスト代わり
+    }
+  }, false);
+})();
+</script>
+
+</body>
+</html>
