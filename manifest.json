@@ -1,8 +1,8 @@
 {
   "short_name": "PWA",
   "name": "PWA Sample App",
-  "display": "standalone",  // これが重要！アプリモードで表示
-  "start_url": "/",
+  "display": "standalone",  // アプリモードで表示
+  "start_url": "./",        // 相対パスの確認。ルート（ホーム）ページに遷移
   "background_color": "#ffffff",  // 背景色
   "theme_color": "#000000",  // テーマカラー
   "icons": [
