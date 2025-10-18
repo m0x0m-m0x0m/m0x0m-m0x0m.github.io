@@ -4,13 +4,11 @@ self.addEventListener('install', (event) => {
     caches.open('my-cache').then((cache) => {
       console.log('Caching resources...');
       return cache.addAll([
-        '/.', 
-        '/index.html'// パスを絶対にする
-        '/style.css',
-        '/button.png',
-        '/hazure.png',
-        '/atari.mp4',
-        '/manifest.json'  // マニフェストもキャッシュに追加
+        '/index.html', // インデックスファイル
+        '/button.png',  // ボタン画像
+        '/hazure.png',  // ハズレ画像
+        '/atari.mp4',   // アタリ動画
+        '/manifest.json' // マニフェストファイル
       ]).catch((error) => {
         console.error('キャッシュの追加中にエラーが発生しました:', error);
       });
@@ -26,7 +24,7 @@ self.addEventListener('activate', (event) => {
         cacheNames.map((cacheName) => {
           if (cacheName !== 'my-cache') {
             console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
+            return caches.delete(cacheName); // 古いキャッシュを削除
           }
         })
       );
@@ -39,10 +37,10 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {
-        console.log('Returning from cache: ', event.request.url);
+        console.log('Returning from cache: ', event.request.url); // キャッシュから返す
         return response;
       }
-      console.log('Fetching from network: ', event.request.url);
+      console.log('Fetching from network: ', event.request.url); // ネットワークから取得
       return fetch(event.request);
     })
   );
