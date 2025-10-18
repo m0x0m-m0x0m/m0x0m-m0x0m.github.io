@@ -1,34 +1,28 @@
-var CACHE_NAME = 'pwa-sample-cache-v1';
-var urlsToCache = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/script.js',
-    '/images/icon-192x192.jpg',
-    '/images/icon-512x512.jpg',
-    '/atari.mp4',
-    '/hazure.png',
-    '/button.png'
-];
-
-// インストール処理
-self.addEventListener('install', function(event) {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(function(cache) {
-                console.log('Opened cache');
-                return cache.addAll(urlsToCache);
-            })
-    );
+self.addEventListener('install', (event) => {
+  console.log('Service Worker installing.');
+  event.waitUntil(
+    caches.open('my-cache').then((cache) => {
+      return cache.addAll([
+        '/index.html',
+        '/images/icon-192x192.jpg',
+        '/images/icon-512x512.jpg',
+        '/button.png',
+        '/hazure.png',
+        '/atari.mp4',
+        // 他に必要なファイルを追加
+      ]);
+    })
+  );
 });
 
-// リソースフェッチ時のキャッシュロード処理
-self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        caches.match(event.request)
-            .then(function(response) {
-                // キャッシュがあればそれを返し、なければネットワークから取得
-                return response || fetch(event.request);
-            })
-    );
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activated.');
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
 });
