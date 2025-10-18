@@ -3,13 +3,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open('my-cache').then((cache) => {
       return cache.addAll([
-        '/index.html',
+        '/',
+        '/index.html',  // トップページをキャッシュに追加
         '/images/icon-192x192.jpg',
         '/images/icon-512x512.jpg',
         '/button.png',
         '/hazure.png',
         '/atari.mp4',
-        // 他に必要なファイルを追加
+        // 他のファイルもここに追加
       ]);
     })
   );
