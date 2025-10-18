@@ -4,9 +4,8 @@ self.addEventListener('install', (event) => {
     caches.open('my-cache').then((cache) => {
       console.log('Caching resources...');  // リソースがキャッシュに追加されていることを確認
       return cache.addAll([
+        './',
         '/index.html',
-        '/images/icon-192x192.jpg',
-        '/images/icon-512x512.jpg',
         '/button.png',
         '/hazure.png',
         '/atari.mp4',
