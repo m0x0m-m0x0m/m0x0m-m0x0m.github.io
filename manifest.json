@@ -1,7 +1,7 @@
 {
   "name": "抽選App",
   "short_name": "抽選App",
-  "start_url": "/",  // ルートURLを指定
+  "start_url": "./",  // ルートURLを指定
   "display": "standalone",  // これによりPWAとして起動
   "background_color": "#ffffff",
   "theme_color": "#000000",
