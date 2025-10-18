@@ -1,7 +1,7 @@
 {
   "name": "抽選App",
   "short_name": "抽選App",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",  // この設定が重要です。PWAアプリのように起動させるためには standalone を指定
   "background_color": "#ffffff",
   "theme_color": "#000000",
