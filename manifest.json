@@ -1,7 +1,7 @@
 {
   "name": "抽選App",
   "short_name": "抽選App",
-  "start_url": "https://m0x0m-m0x0m.github.io/index.html",  // ルートURLを指定
+  "start_url": "/",  // ルートURLを指定
   "display": "standalone",  // PWAとして起動
   "background_color": "#ffffff",
   "theme_color": "#000000"
