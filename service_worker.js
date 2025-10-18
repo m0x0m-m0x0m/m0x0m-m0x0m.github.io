@@ -4,7 +4,8 @@ self.addEventListener('install', (event) => {
     caches.open('my-cache').then((cache) => {
       console.log('Caching resources...');
       return cache.addAll([
-        '/.',  // パスを絶対にする
+        '/.', 
+        '/index.html'// パスを絶対にする
         '/style.css',
         '/button.png',
         '/hazure.png',
