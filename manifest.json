@@ -1,20 +1,8 @@
 {
   "name": "抽選App",
   "short_name": "抽選App",
-  "start_url": "./",  // ルートURLを指定
-  "display": "standalone",  // これによりPWAとして起動
+  "start_url": "/index.html",  // ルートURLを指定
+  "display": "standalone",  // PWAとして起動
   "background_color": "#ffffff",
-  "theme_color": "#000000",
-  "icons": [
-    {
-      "src": "/images/icon-192x192.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "/images/icon-512x512.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
-    }
-  ]
+  "theme_color": "#000000"
 }
