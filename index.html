@@ -2,11 +2,11 @@
 <head>
     <title>抽選App</title>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="抽選App">
+    <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icon.png">
     </head>
 <body>
@@ -112,6 +112,7 @@ video {
 </style>
 
 <script>
+    // Service Workerの登録処理はそのまま残します
     if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service_worker.js').then(function(registration) {
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
@@ -128,16 +129,19 @@ video {
     el.randomSwitching = document.querySelectorAll('.js-randomSwitching');
     el.random = Math.floor(Math.random() * 100);  // 0 ～ 99のランダム値
     const clickButton = document.getElementById('click-button');
-    let count = localStorage.getItem('clickCount') ? parseInt(localStorage.getItem('clickCount')) : 0;
+    
+    // 常に初期値 0 と false で開始
+    let count = 0; 
     const countDisplay = document.getElementById('count');
-    let isWinner = localStorage.getItem('isWinner') === 'true';
+    let isWinner = false; 
+    
     const resultImage = document.getElementById('result-image'); // 画像要素を取得
 
     // 初期表示
     countDisplay.innerText = count;
 
-    // 当選状態の確認と適用
-    if (isWinner || el.random < 6) {  // 1/16 の確率 (0～5 の場合)
+    // 当選状態の確認と適用 (初期のランダム判定は残します)
+    if (isWinner || el.random < 6) { 
       randomSwitchFnc();
     }
 
@@ -146,43 +150,40 @@ video {
       if (!isWinner) {
         count++;
         countDisplay.innerText = count;
-        localStorage.setItem('clickCount', count);
+        // localStorageの保存処理は削除済み
 
         el.random = Math.floor(Math.random() * 16);  // 0 ～ 15のランダム値
         if (el.random === 0) {  // 1/16 の確率 (0の場合)
           isWinner = true;
-          localStorage.setItem('isWinner', 'true');
+          // localStorageの保存処理は削除済み
           randomSwitchFnc();
         }
       }
     });
 
     function randomSwitchFnc() {
-      // 結果画像を隠す（アタリの場合）
+      // (中略：当選時の処理)
       resultImage.style.display = 'none';
 
-      // 確率で切り替え有りのエリアに動画を表示
       const videoElement = document.createElement('video');
-      videoElement.src = 'atari.mp4';  // アタリの動画
-      videoElement.controls = true;    // 動画のコントロールボタンを表示
-
-      // スマホ対応のスタイルを追加
+      videoElement.src = 'atari.mp4'; 
+      videoElement.controls = true; 
+      // (中略：スタイル調整)
       videoElement.style.width = '100%';
-      videoElement.style.height = 'auto'; // 高さは自動で調整
-      videoElement.style.maxWidth = '100%';  // 最大幅100%
-      videoElement.style.maxHeight = '60vh'; // 最大高さを60%に制限
-      videoElement.style.objectFit = 'contain'; // 縦横比を保って表示
+      videoElement.style.height = 'auto'; 
+      videoElement.style.maxWidth = '100%';  
+      videoElement.style.maxHeight = '60vh'; 
+      videoElement.style.objectFit = 'contain'; 
       
-      el.randomSwitching[0].appendChild(videoElement);  // videoを追加
+      el.randomSwitching[0].appendChild(videoElement); 
 
-      // 自動で動画を再生
       videoElement.play();
 
       clickButton.disabled = true;
-      clickButton.style.cursor = 'not-allowed';  // クリックを無効化
+      clickButton.style.cursor = 'not-allowed'; 
       clickButton.style.pointerEvents = 'none';
 
-      clickButton.setAttribute('alt', '当選おめでとう！'); // ボタンのテキスト代わり
+      clickButton.setAttribute('alt', '当選おめでとう！'); 
     }
   }, false);
 })();
